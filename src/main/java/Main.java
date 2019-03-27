@@ -6,19 +6,21 @@ import repository.*;
 import service.*;
 import validation.*;
 
+import java.io.FileNotFoundException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Validator<Student> studentValidator = new StudentValidator();
-        Validator<Tema> temaValidator = new TemaValidator();
-        Validator<Nota> notaValidator = new NotaValidator();
+        Validator<Assignment> assignmentValidator = new AssignmentValidator();
+        Validator<Grade> gradeValidator = new GradeValidator();
 
-        StudentXMLRepository fileRepository1 = new StudentXMLRepository(studentValidator, "studenti.xml");
-        TemaXMLRepository fileRepository2 = new TemaXMLRepository(temaValidator, "teme.xml");
-        NotaXMLRepository fileRepository3 = new NotaXMLRepository(notaValidator, "note.xml");
+        StudentRepo studentRepo = new StudentFileRepo(studentValidator, "students.txt");
+        AssignmentRepo assignmentRepo = new AssignmentFileRepo(assignmentValidator, "assignments.txt");
+        GradeRepo gradeRepo = new GradeFileRepo(gradeValidator, studentRepo,assignmentRepo,"grades.txt");
 
-        Service service = new Service(fileRepository1, fileRepository2, fileRepository3);
-        UI consola = new UI(service);
-        consola.run();
+        Service service = new Service(studentRepo, assignmentRepo, gradeRepo);
+        UI console = new UI(service);
+        console.run();
 
         //PENTRU GUI
         // de avut un check: daca profesorul introduce sau nu saptamana la timp

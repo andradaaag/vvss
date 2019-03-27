@@ -1,0 +1,6 @@
+studentId:1
+name:Bob
+group:930
+email:pussySlayer69@gmail.com
+professor:Billy
+subscribed:true
