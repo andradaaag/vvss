@@ -3,7 +3,6 @@ package repository;
 import domain.Grade;
 import exception.ValidationException;
 import javafx.util.Pair;
-import validation.GradeValidator;
 import validation.Validator;
 
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GradeRepo {
-    private StudentRepo studentRepo;
-    private AssignmentRepo assignmentRepo;
+    protected StudentRepo studentRepo;
+    protected AssignmentRepo assignmentRepo;
     private HashMap<Pair<String, String>, Grade> data;
     private Validator<Grade> validator;
 

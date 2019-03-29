@@ -16,11 +16,13 @@ public class Service {
     private StudentRepo studentRepo;
     private AssignmentRepo assignmentRepo;
     private GradeRepo gradeRepo;
+    private EmailService emailService;
 
-    public Service(StudentRepo studentRepo, AssignmentRepo assignmentRepo, GradeRepo gradeRepo) {
+    public Service(StudentRepo studentRepo, AssignmentRepo assignmentRepo, GradeRepo gradeRepo, EmailService emailService) {
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
         this.gradeRepo = gradeRepo;
+        this.emailService = emailService;
     }
 
     public Iterable<Student> getAllStudents() {
@@ -44,6 +46,7 @@ public class Service {
     public boolean saveAssignment(String id, String description, int deadline, int startline) {
         Assignment assignment = new Assignment(id, description, deadline, startline);
 
+        emailService.notifyNewAssignment();
         return assignmentRepo.save(assignment);
     }
 

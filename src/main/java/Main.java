@@ -22,6 +22,8 @@ public class Main {
         UI console = new UI(service);
         console.run();
 
+        //LEFT TO DO: create files when a student gets a grade that contain the grades for the student
+
         //PENTRU GUI
         // de avut un check: daca profesorul introduce sau nu saptamana la timp
         // daca se introduce nota la timp, se preia saptamana din sistem

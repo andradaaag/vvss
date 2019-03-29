@@ -1,9 +1,9 @@
 package repository;
 
 import domain.Grade;
+import domain.Student;
 import exception.FileException;
 import exception.InputException;
-import validation.GradeValidator;
 import validation.Validator;
 
 import java.io.*;
@@ -32,15 +32,14 @@ public class GradeFileRepo extends GradeRepo {
 
         return gradeBuilder.studentId(studentIdLine.substring(studentIdLine.indexOf(':') + 1))
                 .assignmentId(assignmentIdLine.substring(assignmentIdLine.indexOf(':') + 1))
-                .grade(Double.parseDouble(gradeLine.substring(gradeLine.indexOf(':')+1)))
+                .grade(Double.parseDouble(gradeLine.substring(gradeLine.indexOf(':') + 1)))
                 .deadline(Integer.parseInt(deadlineLine.substring(deadlineLine.indexOf(':') + 1)))
                 .delivery(Integer.parseInt(deliveryLine.substring(deliveryLine.indexOf(':') + 1)))
                 .feedback(feedback.substring(feedback.indexOf(':') + 1))
                 .build();
-
     }
 
-    private void validateInput(String studentId, String assignmentId,String grade, String deadline, String delivery,
+    private void validateInput(String studentId, String assignmentId, String grade, String deadline, String delivery,
                                String feedback) {
         if (!studentId.contains("studentId:")) {
             throw new InputException();
@@ -80,9 +79,30 @@ public class GradeFileRepo extends GradeRepo {
     public boolean addGrade(Grade entity) {
         if (super.addGrade(entity)) {
             writeToFile();
+            writeToStudentFile(entity);
+
             return true;
         }
         return false;
+    }
+
+    private void writeToStudentFile(Grade entity) {
+        Student student = studentRepo.find(entity.getGradeId().getKey());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\nAssignment:").append(entity.getGradeId().getValue());
+        stringBuilder.append("\nDelivered in the week:").append(entity.getDelivery());
+        stringBuilder.append("\nDeadline:").append(entity.getDelivery());
+        stringBuilder.append("\nFeedback:").append(entity.getFeedback()).append("\n");
+
+        try {
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(student.getName().concat(".txt")));
+            writer.write(stringBuilder.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void writeToFile() {
