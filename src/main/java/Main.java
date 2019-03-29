@@ -18,7 +18,9 @@ public class Main {
         AssignmentRepo assignmentRepo = new AssignmentFileRepo(assignmentValidator, "assignments.txt");
         GradeRepo gradeRepo = new GradeFileRepo(gradeValidator, studentRepo,assignmentRepo,"grades.txt");
 
-        Service service = new Service(studentRepo, assignmentRepo, gradeRepo);
+        EmailService emailService = new EmailService();
+
+        Service service = new Service(studentRepo, assignmentRepo, gradeRepo, emailService);
         UI console = new UI(service);
         console.run();
 

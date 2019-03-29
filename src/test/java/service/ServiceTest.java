@@ -23,21 +23,28 @@ public class ServiceTest {
 
     @Before
     public void setUp() {
+        //initiate proper validators
         Validator<Student> studentValidator = new StudentValidator();
         Validator<Assignment> assignmentValidator = new AssignmentValidator();
         Validator<Grade> gradeValidator = new GradeValidator();
 
+        //use in memory repositories to avoid the need for clean-up and the possibility for conflicts
         StudentRepo studentRepo = new StudentRepo(studentValidator);
         AssignmentRepo assignmentRepo = new AssignmentRepo(assignmentValidator);
         GradeRepo gradeRepo = new GradeRepo(gradeValidator, studentRepo, assignmentRepo);
 
-        service = new Service(studentRepo, assignmentRepo, gradeRepo);
+        EmailService emailService = new EmailService();
+
+        //create the service; ie the entity to be checked
+        service = new Service(studentRepo, assignmentRepo, gradeRepo, emailService);
+
+        //add an entity in the service to allow testing when a student already exists
         service.saveStudent("1", "Bob", 932, "xXxBobBobitzaxXx@gmail.com", "prof");
     }
 
     @Test
     public void saveStudentWithExistingIDTest() {
-        assertFalse(service.saveStudent("1", "A", 933, "email", "professor"));
+        assertFalse(service.saveStudent("1", "Bill", 933, "email", "professor"));
     }
 
     @Test(expected = ValidationException.class)
@@ -53,38 +60,57 @@ public class ServiceTest {
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithEmptyIdTest() {
-        service.saveStudent("", "A", 933, "email", "professor");
+        service.saveStudent("", "Bill", 933, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithNullIdTest() {
-        service.saveStudent(null, "A", 933, "email", "professor");
+        service.saveStudent(null, "Bill", 933, "email", "professor");
     }
 
+
+    //START TESTS FOR EDGE CASES GROUP
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber1Test() {
-        service.saveStudent("11", "", 109, "email", "professor");
+        service.saveStudent("11", "Bill", 109, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber2Test() {
-        service.saveStudent("11", "", 939, "email", "professor");
+        service.saveStudent("11", "Bill", 939, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber3Test() {
-        assertFalse(service.saveStudent("11", "", 0, "email", "professor"));
+        assertFalse(service.saveStudent("11", "Bill", 0, "email", "professor"));
     }
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber4Test() {
-        service.saveStudent("11", "", -1, "email", "professor");
+        service.saveStudent("11", "Bill", -1, "email", "professor");
     }
+
+    public void saveStudentWithProperGroupNumber1Test() {
+        assertFalse(service.saveStudent("11", "Bill", 110, "email", "professor"));
+    }
+
+    public void saveStudentWithProperGroupNumber2Test() {
+        service.saveStudent("11", "Bill", 111, "email", "professor");
+    }
+
+    public void saveStudentWithProperGroupNumber3Test() {
+        assertFalse(service.saveStudent("11", "Bill", 938, "email", "professor"));
+    }
+
+    public void saveStudentWithProperGroupNumber4Test() {
+        service.saveStudent("11", "Bill", 937, "email", "professor");
+    }
+
+    //END TESTS FOR EDGE CASES GROUP
 
     @Test
     public void saveValidStudent1Test() {
         assertTrue(service.saveStudent("11", "Andrada", 933, "email", "professor"));
-        service.deleteStudent("11");
     }
 
     @Test

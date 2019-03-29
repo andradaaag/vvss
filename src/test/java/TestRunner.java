@@ -8,9 +8,11 @@ public class TestRunner {
         Result result = JUnitCore.runClasses(ServiceTest.class);
         for (Failure failure : result.getFailures()) {
             System.out.println(failure.toString());
+            System.exit(1);
         }
-        if (result.wasSuccessful()){
-            System.out.println("everything ran as expected;");
+
+        if (!result.wasSuccessful()){
+            System.exit(1);
         }
     }
 }
