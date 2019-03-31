@@ -1,0 +1,6 @@
+studentId:1
+assignmentId:1
+grade:8.0
+deadline:10
+delivery:8
+feedback:good

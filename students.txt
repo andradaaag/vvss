@@ -1,0 +1,6 @@
+studentId:1
+name:Bob
+group:930
+email:regularEmail@gmail.com
+professor:Billy
+subscribed:true
