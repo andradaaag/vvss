@@ -72,12 +72,12 @@ public class ServiceTest {
     //START TESTS FOR EDGE CASES GROUP
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber1Test() {
-        service.saveStudent("11", "Bill", 109, "email", "professor");
+        service.saveStudent("11", "Bill", 110, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithWrongGroupNumber2Test() {
-        service.saveStudent("11", "Bill", 939, "email", "professor");
+        service.saveStudent("11", "Bill", 938, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
@@ -90,20 +90,24 @@ public class ServiceTest {
         service.saveStudent("11", "Bill", -1, "email", "professor");
     }
 
+    @Test
     public void saveStudentWithProperGroupNumber1Test() {
-        assertFalse(service.saveStudent("11", "Bill", 110, "email", "professor"));
+        assertTrue(service.saveStudent("11", "Bill", 111, "email", "professor"));
     }
 
+    @Test
     public void saveStudentWithProperGroupNumber2Test() {
-        service.saveStudent("11", "Bill", 111, "email", "professor");
+        assertTrue(service.saveStudent("11", "Bill", 112, "email", "professor"));
     }
 
+    @Test
     public void saveStudentWithProperGroupNumber3Test() {
-        assertFalse(service.saveStudent("11", "Bill", 938, "email", "professor"));
+        assertTrue(service.saveStudent("11", "Bill", 937, "email", "professor"));
     }
 
+    @Test
     public void saveStudentWithProperGroupNumber4Test() {
-        service.saveStudent("11", "Bill", 937, "email", "professor");
+        assertTrue(service.saveStudent("11", "Bill", 936, "email", "professor"));
     }
 
     //END TESTS FOR EDGE CASES GROUP
