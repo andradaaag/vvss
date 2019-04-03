@@ -120,9 +120,9 @@ public class ServiceTest {
         assertTrue(service.saveAssignment("2", "Andrada", 3, 2));
     }
 
-    @Test
-    public void saveAssignmentWithExistingIDTest() {
-        assertFalse(service.saveAssignment("1", "Bill", 3, 2));
+    @Test(expected = ValidationException.class)
+    public void saveAssignmentWithEmptyIDTest() {
+        service.saveAssignment("", "a", 3, 2);
     }
 
     @Test(expected = ValidationException.class)
@@ -138,5 +138,10 @@ public class ServiceTest {
     @Test(expected = ValidationException.class)
     public void saveAssignmentWithLessThan1StartlineTest() {
         service.saveAssignment("2", "a", 3, 0);
+    }
+
+    @Test
+    public void saveAssignmentWithExistingIDTest() {
+        assertFalse(service.saveAssignment("1", "Bill", 3, 2));
     }
 }
