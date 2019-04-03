@@ -71,54 +71,44 @@ public class ServiceTest {
 
     //START TESTS FOR EDGE CASES GROUP
     @Test(expected = ValidationException.class)
-    public void saveStudentWithWrongGroupNumber1Test() {
+    public void saveStudentWithGroupNumberOutsideLowerLimitTest() {
         service.saveStudent("11", "Bill", 110, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
-    public void saveStudentWithWrongGroupNumber2Test() {
+    public void saveStudentWithGroupNumberAboveLowerLimitTest() {
         service.saveStudent("11", "Bill", 938, "email", "professor");
     }
 
     @Test(expected = ValidationException.class)
-    public void saveStudentWithWrongGroupNumber3Test() {
+    public void saveStudentWithGroupNumber0Test() {
         assertFalse(service.saveStudent("11", "Bill", 0, "email", "professor"));
     }
 
     @Test(expected = ValidationException.class)
-    public void saveStudentWithWrongGroupNumber4Test() {
+    public void saveStudentWithGroupNumberNegativeTest() {
         service.saveStudent("11", "Bill", -1, "email", "professor");
     }
 
     @Test
-    public void saveStudentWithProperGroupNumber1Test() {
+    public void saveStudentWithGroupNumberOnLowerLimitTest() {
         assertTrue(service.saveStudent("11", "Bill", 111, "email", "professor"));
     }
 
     @Test
-    public void saveStudentWithProperGroupNumber2Test() {
-        assertTrue(service.saveStudent("11", "Bill", 112, "email", "professor"));
-    }
-
-    @Test
-    public void saveStudentWithProperGroupNumber3Test() {
+    public void saveStudentWithGroupNumberOnHighestLimitTest() {
         assertTrue(service.saveStudent("11", "Bill", 937, "email", "professor"));
-    }
-
-    @Test
-    public void saveStudentWithProperGroupNumber4Test() {
-        assertTrue(service.saveStudent("11", "Bill", 936, "email", "professor"));
     }
 
     //END TESTS FOR EDGE CASES GROUP
 
     @Test
-    public void saveValidStudent1Test() {
+    public void saveValidStudentCheckReturnValueTest() {
         assertTrue(service.saveStudent("11", "Andrada", 933, "email", "professor"));
     }
 
     @Test
-    public void saveValidStudent2Test() {
+    public void saveValidStudentCheckAddEffectTest() {
         long numberOfStudents = StreamSupport.stream(service.getAllStudents().spliterator(), false).count();
         service.saveStudent("11", "Andrada", 933, "email", "professor");
         assertEquals(numberOfStudents + 1, StreamSupport.stream(service.getAllStudents().spliterator(), false).count());
