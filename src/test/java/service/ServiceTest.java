@@ -40,6 +40,7 @@ public class ServiceTest {
 
         //add an entity in the service to allow testing when a student already exists
         service.saveStudent("1", "Bob", 932, "xXxBobBobitzaxXx@gmail.com", "prof");
+        service.saveAssignment("1", "Bob", 3, 2);
     }
 
     @Test
@@ -49,7 +50,6 @@ public class ServiceTest {
 
     @Test(expected = ValidationException.class)
     public void saveStudentWithEmptyNameTest() {
-
         service.saveStudent("11", "", 933, "email", "professor");
     }
 
@@ -112,6 +112,31 @@ public class ServiceTest {
         long numberOfStudents = StreamSupport.stream(service.getAllStudents().spliterator(), false).count();
         service.saveStudent("11", "Andrada", 933, "email", "professor");
         assertEquals(numberOfStudents + 1, StreamSupport.stream(service.getAllStudents().spliterator(), false).count());
-        service.deleteStudent("11");
+    }
+
+    //TESTS FOR ADD ASSIGNMENT
+    @Test
+    public void saveValidAssignmentCheckReturnValueTest() {
+        assertTrue(service.saveAssignment("2", "Andrada", 3, 2));
+    }
+
+    @Test
+    public void saveAssignmentWithExistingIDTest() {
+        assertFalse(service.saveAssignment("1", "Bill", 3, 2));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void saveAssignmentWithEmptyDescriptionTest() {
+        service.saveAssignment("2", "", 3, 2);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void saveAssignmentWithLessThan1DeadlineTest() {
+        service.saveAssignment("2", "a", 0, 2);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void saveAssignmentWithLessThan1StartlineTest() {
+        service.saveAssignment("2", "a", 3, 0);
     }
 }
