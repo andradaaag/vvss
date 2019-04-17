@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 import static org.junit.Assert.*;
 
 public class ServiceTest {
-    public Service service;
+    private Service service;
 
     @Before
     public void setUp() {
@@ -68,8 +68,8 @@ public class ServiceTest {
         service.saveStudent(null, "Bill", 933, "email", "professor");
     }
 
+    // START TESTS FOR EDGE CASES GROUP
 
-    //START TESTS FOR EDGE CASES GROUP
     @Test(expected = ValidationException.class)
     public void saveStudentWithGroupNumberOutsideLowerLimitTest() {
         service.saveStudent("11", "Bill", 110, "email", "professor");
@@ -100,7 +100,7 @@ public class ServiceTest {
         assertTrue(service.saveStudent("11", "Bill", 937, "email", "professor"));
     }
 
-    //END TESTS FOR EDGE CASES GROUP
+    // END TESTS FOR EDGE CASES GROUP
 
     @Test
     public void saveValidStudentCheckReturnValueTest() {
@@ -114,7 +114,8 @@ public class ServiceTest {
         assertEquals(numberOfStudents + 1, StreamSupport.stream(service.getAllStudents().spliterator(), false).count());
     }
 
-    //TESTS FOR ADD ASSIGNMENT
+    // TESTS FOR ADD ASSIGNMENT
+
     @Test
     public void saveValidAssignmentCheckReturnValueTest() {
         assertTrue(service.saveAssignment("2", "Andrada", 3, 2));
@@ -143,5 +144,17 @@ public class ServiceTest {
     @Test
     public void saveAssignmentWithExistingIDTest() {
         assertFalse(service.saveAssignment("1", "Bill", 3, 2));
+    }
+
+    // TESTS FOR ADD GRADE
+
+    @Test
+    public void saveValidGradeCheckReturnValueTest() {
+        assertTrue(service.saveGrade("1", "1", 10, 3, "good job"));
+    }
+
+    @Test(expected = ValidationException.class)
+    public void saveGradeWithEmptyStudentIDTest() {
+        service.saveGrade("", "1", 10, 3, "good job");
     }
 }

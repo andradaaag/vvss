@@ -3,6 +3,7 @@ package service;
 import domain.Assignment;
 import domain.Grade;
 import domain.Student;
+import exception.ValidationException;
 import javafx.util.Pair;
 import repository.AssignmentRepo;
 import repository.GradeRepo;
@@ -52,7 +53,7 @@ public class Service {
 
     public boolean saveGrade(String studentId, String assignmentId, double gradeValue, int delivery, String feedback) {
         if (studentRepo.find(studentId) == null || assignmentRepo.find(assignmentId) == null) {
-            throw new RuntimeException("Invalid student or assignment id");
+            throw new ValidationException("Invalid student or assignment id");
         }
         int deadline = assignmentRepo.find(assignmentId).getDeadline();
 
