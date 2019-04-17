@@ -40,6 +40,8 @@ public class IntegrationTest {
         service.saveAssignment("1", "Bob", 3, 2);
     }
 
+    // BIG BANG APPROACH
+
     @Test
     public void bigBang() {
         service.saveStudent("2", "Bob", 932, "xXxBobBobitzaxXx@gmail.com", "prof");
@@ -60,5 +62,25 @@ public class IntegrationTest {
     @Test
     public void saveValidGradeCheckReturnValueTest() {
         assertTrue(service.saveGrade("1", "1", 10, 3, "good job"));
+    }
+
+    // TOP DOWN APPROACH
+
+    @Test
+    public void topDownAddStudent() {
+        assertTrue(service.saveStudent("2", "Andrada", 933, "email", "professor"));
+    }
+
+    @Test
+    public void topDownAddAssignment() {
+        service.saveStudent("2", "Andrada", 933, "email", "professor");
+        assertTrue(service.saveAssignment("11", "Andrada", 3, 2));
+    }
+
+    @Test
+    public void topDownAddGrade() {
+        service.saveStudent("2", "Andrada", 933, "email", "professor");
+        service.saveAssignment("2", "Andrada", 3, 2);
+        assertTrue(service.saveGrade("2", "2", 10, 3, "good job"));
     }
 }
